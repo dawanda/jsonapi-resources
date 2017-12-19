@@ -411,13 +411,15 @@ module JSONAPI
         end
       else
         source.public_send(relationship.name).map do |value|
-          [relationship.type, value.id]
+          [relationship.type, value.id, value.meta(value.context)]
         end
       end
 
-      linkage_types_and_values.each do |type, value|
-        if type && value
-          linkage.append({type: format_key(type), id: @id_formatter.format(value)})
+      linkage_types_and_values.each do |type, value, meta|
+        if type && value && meta.nil?
+          linkage.append({ type: format_key(type), id: @id_formatter.format(value) })
+        elsif type && value && meta.present?
+          linkage.append({ type: format_key(type), id: @id_formatter.format(value), meta: meta })
         end
       end
       linkage
