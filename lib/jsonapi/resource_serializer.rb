@@ -416,7 +416,7 @@ module JSONAPI
       end
 
       linkage_types_and_values.each do |type, value, meta|
-        if type && value && meta.nil?
+        if type && value && meta.blank?
           linkage.append({ type: format_key(type), id: @id_formatter.format(value) })
         elsif type && value && meta.present?
           linkage.append({ type: format_key(type), id: @id_formatter.format(value), meta: meta })
